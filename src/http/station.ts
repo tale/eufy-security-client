@@ -882,6 +882,13 @@ export class Station extends TypedEmitter<StationEvents> {
   }
 
   public isP2PConnectableDevice(): boolean {
+    if (Device.usesSecurityMqtt(this.getDeviceType())) {
+      rootHTTPLogger.debug("Station uses security MQTT, no connection over p2p will be initiated", {
+        stationSN: this.getSerial(),
+        type: this.getDeviceType(),
+      });
+      return false;
+    }
     if (Device.isSmartTrack(this.getDeviceType()) || (!Device.isSupported(this.getDeviceType()) && !this.isStation())) {
       if (!Device.isSupported(this.getDeviceType()) && !this.isStation()) {
         rootHTTPLogger.debug("Station not supported, no connection over p2p will be initiated", {

@@ -568,7 +568,7 @@ export class EufySecurity extends TypedEmitter<EufySecurityEvents> {
       this.devices[serial] = device;
       this.emit("device added", device);
 
-      if (device.isLock()) this.mqttService.subscribeLock(device.getSerial());
+      if (device.isLock() && !device.usesSecurityMqtt()) this.mqttService.subscribeLock(device.getSerial());
       if (device.usesSecurityMqtt() && this.securityMqttService) {
         this.securityMqttService.subscribeLock(device.getSerial(), device.getModel());
       }
